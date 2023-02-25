@@ -13,12 +13,12 @@ struct Node
 {
     struct Node *prev;
     int idx;
-    char *name;
-    char *number;
+    char name[15];
+    char number[15];
     struct Node *next;
 } *head, *tail, *ptr;
 
-int idx_cnt;
+int idx_cnt = 1;
 
 int main()
 {
@@ -42,22 +42,22 @@ int main()
 
         switch (select_menu)
         {
-        case 49:
+        case 49: // 1
             Search();
             break;
-        case 50:
+        case 50: // 2
             Add();
             break;
-        case 51:
+        case 51: // 3
             Update();
             break;
-        case 52:
+        case 52: // 4
             Delete();
             break;
-        case 53:
+        case 53: // 5
             DeleteAll();
             break;
-        case 48:
+        case 48: // 0
             printf("프로그램을 종료합니다. (엔터)");
             getchar();
             fflush(stdin);
@@ -76,23 +76,91 @@ int main()
 
 void View()
 {
+    printf("\tNo.\t이름\t\t전화번호\n\n");
+
     if (head == NULL)
         printf("\t등록된 번호가 없습니다.\n");
     else
     {
-        printf("\t등록된 번호가 있습니다.\n");
-        ////////////////////////////////////////////////////////////////////////////////////
-        // 다음 단계
-        ////////////////////////////////////////////////////////////////////////////////////
+        ptr = head;
+
+        while (ptr != NULL)
+        {
+            printf("\t%-5d\t%-15s\t%-15s\n", ptr->idx, ptr->name, ptr->number);
+            ptr = ptr->next;
+        }
     }
 }
 
 void Search()
 {
-    system("cls");
+    int serch_select = 0;
+    int search_idx;
+    char search_name[15];
+    char search_number[15];
 
-    printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-    system("pause");
+    while (1)
+    {
+        system("cls");
+
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+
+        printf("\n\t1. 순번으로 찾기  2. 이름으로 찾기  3. 번호로 찾기  0. 이전으로 : ");
+        scanf("%d", &serch_select);
+        fflush(stdin);
+
+        if (serch_select == 0)
+            break;
+        if (serch_select >= 1 && serch_select <= 3)
+        {
+            if (serch_select == 1)
+            {
+                printf("\n\t찾을 순번 : ");
+                scanf("%d", &search_idx);
+                fflush(stdin);
+            }
+            if (serch_select == 2)
+            {
+                printf("\n\t찾을 이름 : ");
+                scanf("%s", search_name);
+                fflush(stdin);
+            }
+            if (serch_select == 3)
+            {
+                printf("\n\t찾을 주소 : ");
+                scanf("%s", search_number);
+                fflush(stdin);
+            }
+
+            ptr = head;
+
+            while (ptr != NULL)
+            {
+                if (serch_select == 1 && ptr->idx == search_idx)
+                    break;
+                if (serch_select == 2 && strcmp(ptr->name, search_name) == 0)
+                    break;
+                if (serch_select == 3 && strcmp(ptr->number, search_number) == 0)
+                    break;
+
+                ptr = ptr->next;
+            }
+
+            if (ptr != NULL)
+                printf("\n\t[결과]\t%-5d\t%-15s\t%-15s (엔터)", ptr->idx, ptr->name, ptr->number);
+            else
+                printf("\n\t[실패] 찾지 못했습니다. (엔터)");
+
+            getchar();
+            fflush(stdin);
+        }
+        else
+        {
+            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            getchar();
+            fflush(stdin);
+        }
+    }
 }
 
 void Add()
@@ -146,8 +214,8 @@ void Add()
             }
 
             ptr->idx = idx_cnt++;
-            ptr->name = add_name;
-            ptr->number = add_number;
+            strcpy(ptr->name, add_name);
+            strcpy(ptr->number, add_number);
             ptr->next = NULL;
 
             tail = ptr;
