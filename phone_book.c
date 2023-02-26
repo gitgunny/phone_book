@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <memory.h>
 
 void View();
 void Search();
@@ -94,7 +95,7 @@ void View()
 
 void Search()
 {
-    int serch_select = 0;
+    int search_select = 0;
     int search_idx;
     char search_name[15];
     char search_number[15];
@@ -105,29 +106,30 @@ void Search()
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
-        printf("\n\t1. 순번으로 찾기  2. 이름으로 찾기  3. 번호로 찾기  0. 이전으로 : ");
-        scanf("%d", &serch_select);
+        printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
+        scanf("%d", &search_select);
         fflush(stdin);
 
-        if (serch_select == 0)
+        if (search_select == 0)
             break;
-        if (serch_select >= 1 && serch_select <= 3)
+
+        if (search_select >= 1 && search_select <= 3)
         {
-            if (serch_select == 1)
+            if (search_select == 1)
             {
-                printf("\n\t찾을 순번 : ");
+                printf("\n\t검색할 순번 : ");
                 scanf("%d", &search_idx);
                 fflush(stdin);
             }
-            if (serch_select == 2)
+            if (search_select == 2)
             {
-                printf("\n\t찾을 이름 : ");
+                printf("\n\t검색할 이름 : ");
                 scanf("%s", search_name);
                 fflush(stdin);
             }
-            if (serch_select == 3)
+            if (search_select == 3)
             {
-                printf("\n\t찾을 주소 : ");
+                printf("\n\t검색할 주소 : ");
                 scanf("%s", search_number);
                 fflush(stdin);
             }
@@ -136,11 +138,11 @@ void Search()
 
             while (ptr != NULL)
             {
-                if (serch_select == 1 && ptr->idx == search_idx)
+                if (search_select == 1 && ptr->idx == search_idx)
                     break;
-                if (serch_select == 2 && strcmp(ptr->name, search_name) == 0)
+                if (search_select == 2 && strcmp(ptr->name, search_name) == 0)
                     break;
-                if (serch_select == 3 && strcmp(ptr->number, search_number) == 0)
+                if (search_select == 3 && strcmp(ptr->number, search_number) == 0)
                     break;
 
                 ptr = ptr->next;
@@ -149,7 +151,7 @@ void Search()
             if (ptr != NULL)
                 printf("\n\t[결과]\t%-5d\t%-15s\t%-15s (엔터)", ptr->idx, ptr->name, ptr->number);
             else
-                printf("\n\t[실패] 찾지 못했습니다. (엔터)");
+                printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
 
             getchar();
             fflush(stdin);
@@ -237,16 +239,120 @@ void Update()
 
 void Delete()
 {
-    system("cls");
+    int delete_select = 0;
+    int delete_idx;
+    char delete_name[15];
+    char delete_number[15];
 
-    printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-    system("pause");
+    while (1)
+    {
+        system("cls");
+
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        system("pause");
+        break;
+
+        printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
+        scanf("%d", &delete_select);
+        fflush(stdin);
+
+        if (delete_select == 0)
+            break;
+
+        if (delete_select >= 1 && delete_select <= 3)
+        {
+            if (delete_select == 1)
+            {
+                printf("\n\t삭제할 순번 : ");
+                scanf("%d", &delete_idx);
+                fflush(stdin);
+            }
+            if (delete_select == 2)
+            {
+                printf("\n\t삭제할 이름 : ");
+                scanf("%s", delete_name);
+                fflush(stdin);
+            }
+            if (delete_select == 3)
+            {
+                printf("\n\t삭제할 주소 : ");
+                scanf("%s", delete_number);
+                fflush(stdin);
+            }
+
+            ptr = head;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            while (ptr != NULL)
+            {
+                if (delete_select == 1 && ptr->idx == delete_idx)
+                    break;
+                if (delete_select == 2 && strcmp(ptr->name, delete_name) == 0)
+                    break;
+                if (delete_select == 3 && strcmp(ptr->number, delete_number) == 0)
+                    break;
+
+                ptr = ptr->next;
+            }
+
+            if (ptr != NULL)
+                printf("\n\t[결과] 삭제 되었습니다. (엔터)");
+            else
+                printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
+
+            getchar();
+            fflush(stdin);
+        }
+        else
+        {
+            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            getchar();
+            fflush(stdin);
+        }
+    }
 }
 
 void DeleteAll()
 {
-    system("cls");
+    char answer[10];
 
-    printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-    system("pause");
+    while (1)
+    {
+        system("cls");
+        strcpy(answer, "");
+
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+
+        printf("\n\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ");
+        scanf("%s", answer);
+        fflush(stdin);
+
+        if (strlen(answer) == 1 && strchr(answer, '0'))
+            break;
+
+        if (strcmp(answer, "전부삭제") == 0)
+        {
+            ptr = head;
+            head = NULL;
+            while (ptr != NULL)
+            {
+                tail = ptr->next;
+                free(ptr);
+                ptr = tail;
+            }
+            idx_cnt = 1;
+
+            printf("\n\t[성공] 전부 삭제 되었습니다. (엔터)");
+            getchar();
+            fflush(stdin);
+            break;
+        }
+        else
+        {
+            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            getchar();
+            fflush(stdin);
+        }
+    }
 }
