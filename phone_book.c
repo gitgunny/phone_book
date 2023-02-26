@@ -249,9 +249,6 @@ void Delete()
         system("cls");
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        system("pause");
-        break;
 
         printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
         scanf("%d", &delete_select);
@@ -283,15 +280,31 @@ void Delete()
 
             ptr = head;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             while (ptr != NULL)
             {
-                if (delete_select == 1 && ptr->idx == delete_idx)
+                if ((delete_select == 1 && ptr->idx == delete_idx) || (delete_select == 2 && strcmp(ptr->name, delete_name) == 0) || (delete_select == 3 && strcmp(ptr->number, delete_number) == 0))
+                {
+                    if (ptr == head)
+                        head = ptr->next;
+                    else if (ptr == tail)
+                    {
+                        if (ptr->prev == head)
+                            head->next = NULL;
+                        else
+                        {
+                            tail = ptr->prev;
+                            tail->next = NULL;
+                        }
+                    }
+                    else
+                    {
+                        ptr->prev->next = ptr->next;
+                        ptr->next->prev = ptr->prev;
+                    }
+                    free(ptr);
+                    idx_cnt--;
                     break;
-                if (delete_select == 2 && strcmp(ptr->name, delete_name) == 0)
-                    break;
-                if (delete_select == 3 && strcmp(ptr->number, delete_number) == 0)
-                    break;
+                }
 
                 ptr = ptr->next;
             }
