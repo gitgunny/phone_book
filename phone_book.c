@@ -93,6 +93,8 @@ void View()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////// 순번 자동정렬 없음(중간 데이터 삭제 후 추가시 중간 순번 공백)
+
 void Search()
 {
     int search_select = 0;
@@ -129,7 +131,7 @@ void Search()
             }
             if (search_select == 3)
             {
-                printf("\n\t검색할 주소 : ");
+                printf("\n\t검색할 번호 : ");
                 scanf("%s", search_number);
                 fflush(stdin);
             }
@@ -231,10 +233,127 @@ void Add()
 
 void Update()
 {
-    system("cls");
+    int update_select = 0;
+    int update_idx;
+    char update_name[15];
+    char update_number[15];
 
-    printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-    system("pause");
+    int update_new_select = 0;
+    char update_new_name[15];
+    char update_new_number[15];
+
+    while (1)
+    {
+        system("cls");
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 0. (검색 수정 삭제 함수) 현재 부분 반복입력시 오버플로우 우려
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 1. (전체) else if 추가로 불필요한 if 연산 줄이기
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 2. (수정 함수) 1단계 입력 2단계 입력 질문 부분 수정(UI부분 변경시 전체 수정 검토)
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 3. 이전으로 -> 메인으로 구문 수정???
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 4. (수정 함수) 2단계 입력 while 추가로 잘못 입력시 반복 입력 기능 추가구현(메인으로 -> 이전으로)???
+
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 0. (검색 수정 삭제 함수) 현재 부분 반복입력시 오버플로우 우려
+        //////////////////////////////////////////////////////////////////////////////////////////////////// 3. 이전으로 -> 메인으로 구문 수정???
+
+        printf("\n\t1. 순번 수정  2. 이름 수정  3. 번호 수정  0. 이전으로 : ");
+        scanf("%d", &update_select);
+        fflush(stdin);
+
+        if (update_select == 0)
+            break;
+
+        if (update_select >= 1 && update_select <= 3)
+        {
+            if (update_select == 1)
+            {
+                printf("\n\t수정할 순번 : ");
+                scanf("%d", &update_idx);
+                fflush(stdin);
+            }
+            else if (update_select == 2)
+            {
+                printf("\n\t수정할 이름 : ");
+                scanf("%s", update_name);
+                fflush(stdin);
+            }
+            else if (update_select == 3)
+            {
+                printf("\n\t수정할 번호 : ");
+                scanf("%s", update_number);
+                fflush(stdin);
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////// 0. (검색 수정 삭제 함수) 현재 부분 반복입력시 오버플로우 우려
+            //////////////////////////////////////////////////////////////////////////////////////////////////// 3. 이전으로 -> 메인으로 구문 수정???
+            //////////////////////////////////////////////////////////////////////////////////////////////////// 4-1. (수정 함수) 2단계 입력 while 추가로 잘못 입력시 반복 입력 기능 추가구현(메인으로 -> 이전으로)???
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////// 4-2. 이 단계에서 수정할 대상이 없다면 메시지 출력
+
+            printf("\n\t1. 이름 수정  2. 번호 수정  0. 메인으로 : ");
+            scanf("%d", &update_new_select);
+            fflush(stdin);
+
+            if (update_new_select == 0)
+                break;
+
+            if (update_new_select >= 1 && update_new_select <= 2)
+            {
+                if (update_new_select == 1)
+                {
+                    printf("\n\t수정할 이름 : ");
+                    scanf("%s", update_new_name);
+                }
+                else if (update_new_select == 2)
+                {
+                    printf("\n\t수정할 번호 : ");
+                    scanf("%s", update_new_number);
+                }
+                fflush(stdin);
+            }
+            else
+            {
+                printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+                getchar();
+                fflush(stdin);
+                break;
+            }
+
+            ptr = head;
+
+            while (ptr != NULL)
+            {
+                if ((update_select == 1 && ptr->idx == update_idx) || (update_select == 2 && strcmp(ptr->name, update_name) == 0) || (update_select == 3 && strcmp(ptr->number, update_number) == 0))
+                {
+                    if (update_new_select == 1)
+                        strcpy(ptr->name, update_new_name);
+                    else if (update_new_select == 2)
+                        strcpy(ptr->number, update_new_number);
+
+                    break;
+                }
+
+                ptr = ptr->next;
+            }
+
+            if (ptr != NULL)
+                printf("\n\t[결과] 수정 되었습니다. (엔터)");
+            else
+                printf("\n\t[실패] 수정할 대상이 없습니다. (엔터)");
+
+            getchar();
+            fflush(stdin);
+        }
+        else
+        {
+            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            getchar();
+            fflush(stdin);
+        }
+    }
 }
 
 void Delete()
@@ -273,7 +392,7 @@ void Delete()
             }
             if (delete_select == 3)
             {
-                printf("\n\t삭제할 주소 : ");
+                printf("\n\t삭제할 번호 : ");
                 scanf("%s", delete_number);
                 fflush(stdin);
             }
@@ -312,7 +431,7 @@ void Delete()
             if (ptr != NULL)
                 printf("\n\t[결과] 삭제 되었습니다. (엔터)");
             else
-                printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
+                printf("\n\t[실패] 삭제할 대상이 없습니다. (엔터)");
 
             getchar();
             fflush(stdin);
