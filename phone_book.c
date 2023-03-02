@@ -37,7 +37,7 @@ struct Node
 int idx_cnt;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////// (잔버그 수정 이후)
-//////////////////////////////////////////////////////////////////////////////////////////////////// C++ 문법으로
+//////////////////////////////////////////////////////////////////////////////////////////////////// C++ 문법으로(git 커밋시 cpp 파일 분할확인)
 //////////////////////////////////////////////////////////////////////////////////////////////////// 분할구현 추가
 //////////////////////////////////////////////////////////////////////////////////////////////////// 파일입출력 추가
 //////////////////////////////////////////////////////////////////////////////////////////////////// XOR만을 사용한 데이터 암호화 복호화 추가
@@ -135,16 +135,15 @@ void Search()
         // 초기화
         search_select = 0;
         search_idx = 0;
-        strcpy(search_name, "");
-        strcpy(search_number, "");
+        memset(search_name, 0, sizeof(search_name));
+        memset(search_number, 0, sizeof(search_number));
 
         system("cls");
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
-        //////////////////////////////////////////////////////////////////////////////////////////////////// 오버플로우 의도 후 브레이크 시 오버플로우 발생
-        scanf("%d", &search_select);
+        scanf_s("%d", &search_select, sizeof(search_select));
         fflush(stdin);
 
         if (search_select == 0)
@@ -154,17 +153,17 @@ void Search()
         else if (search_select == 1)
         {
             printf("\n\t검색할 순번 : ");
-            scanf("%d", &search_idx);
+            scanf_s("%d", &search_idx, sizeof(search_idx));
         }
         else if (search_select == 2)
         {
             printf("\n\t검색할 이름 : ");
-            scanf("%s", search_name);
+            scanf_s("%s", search_name, sizeof(search_name));
         }
         else if (search_select == 3)
         {
             printf("\n\t검색할 번호 : ");
-            scanf("%s", search_number);
+            scanf_s("%s", search_number, sizeof(search_number));
         }
         else
         {
@@ -175,7 +174,7 @@ void Search()
         // 버퍼 초기화
         fflush(stdin);
 
-        if (search_select == 1 || search_select == 2 || search_select == 3)
+        if (search_select >= 1 && search_select <= 3)
         {
             ptr = head;
 
@@ -209,30 +208,29 @@ void Add()
     while (1)
     {
         // 초기화
-        strcpy(add_name, "");
-        strcpy(add_number, "");
+        memset(add_name, 0, sizeof(add_name));
+        memset(add_number, 0, sizeof(add_number));
 
         system("cls");
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    추가    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t이름(이전으로 0) : ");
-        //////////////////////////////////////////////////////////////////////////////////////////////////// 오버플로우 의도 후 브레이크 시 오버플로우 발생
-        scanf("%s", add_name);
+        scanf_s("%s", add_name, sizeof(add_name));
         fflush(stdin);
 
         if (strlen(add_name) == 1 && strchr(add_name, '0'))
             break;
 
         printf("\n\t전화번호(이전으로 0) : ");
-        scanf("%s", add_number);
+        scanf_s("%s", add_number, sizeof(add_number));
         fflush(stdin);
 
         if (strlen(add_number) == 1 && strchr(add_number, '0'))
             break;
 
         // 유효성 검사
-        if (strlen(add_name) > 14 || strlen(add_number) > 14)
+        if ((strlen(add_name) < 1 || strlen(add_name) > 14) || (strlen(add_number) < 1 || strlen(add_number) > 14))
         {
             printf("\n\t[실패] 이름이나 전화번호는 영어 14자 또는 한글 7자를 넘을 수 없습니다. (엔터)");
         }
@@ -284,14 +282,14 @@ void Update()
         // 초기화
         update_select = 0;
         update_idx = 0;
-        strcpy(update_name, "");
-        strcpy(update_number, "");
+        memset(update_name, 0, sizeof(update_name));
+        memset(update_number, 0, sizeof(update_number));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////// 아래 해당부분 while 구현시 아래 변수들 해당부분으로 이동
         // 초기화
         update_new_select = 0;
-        strcpy(update_new_name, "");
-        strcpy(update_new_number, "");
+        memset(update_new_name, 0, sizeof(update_new_name));
+        memset(update_new_number, 0, sizeof(update_new_number));
 
         system("cls");
 
@@ -304,7 +302,7 @@ void Update()
         //////////////////////////////////////////////////////////////////////////////////////////////////// 3. 이전으로 -> 메인으로 구문 수정???
 
         printf("\n\t1. 순번 수정  2. 이름 수정  3. 번호 수정  0. 이전으로 : ");
-        scanf("%d", &update_select);
+        scanf_s("%d", &update_select, sizeof(update_select));
         fflush(stdin);
 
         if (update_select == 0)
@@ -315,19 +313,19 @@ void Update()
             if (update_select == 1)
             {
                 printf("\n\t수정할 순번 : ");
-                scanf("%d", &update_idx);
+                scanf_s("%d", &update_idx, sizeof(update_idx));
                 fflush(stdin);
             }
             else if (update_select == 2)
             {
                 printf("\n\t수정할 이름 : ");
-                scanf("%s", update_name);
+                scanf_s("%s", update_name, sizeof(update_name));
                 fflush(stdin);
             }
             else if (update_select == 3)
             {
                 printf("\n\t수정할 번호 : ");
-                scanf("%s", update_number);
+                scanf_s("%s", update_number, sizeof(update_number));
                 fflush(stdin);
             }
 
@@ -336,7 +334,7 @@ void Update()
             //////////////////////////////////////////////////////////////////////////////////////////////////// 4-2. 이 단계에서 수정할 대상이 없다면 메시지 출력(Search 함수 개선)
 
             printf("\n\t1. 이름 수정  2. 번호 수정  0. 메인으로 : ");
-            scanf("%d", &update_new_select);
+            scanf_s("%d", &update_new_select, sizeof(update_new_select));
             fflush(stdin);
 
             if (update_new_select == 0)
@@ -347,12 +345,12 @@ void Update()
                 if (update_new_select == 1)
                 {
                     printf("\n\t수정할 이름 : ");
-                    scanf("%s", update_new_name);
+                    scanf_s("%s", update_new_name, sizeof(update_new_name));
                 }
                 else if (update_new_select == 2)
                 {
                     printf("\n\t수정할 번호 : ");
-                    scanf("%s", update_new_number);
+                    scanf_s("%s", update_new_number, sizeof(update_new_number));
                 }
                 fflush(stdin);
             }
@@ -412,41 +410,47 @@ void Delete()
         // 초기화
         delete_select = 0;
         delete_idx = 0;
-        strcpy(delete_name, "");
-        strcpy(delete_number, "");
+        memset(delete_name, 0, sizeof(delete_name));
+        memset(delete_number, 0, sizeof(delete_number));
 
         system("cls");
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
-        scanf("%d", &delete_select);
+        scanf_s("%d", &delete_select, sizeof(delete_select));
         fflush(stdin);
 
         if (delete_select == 0)
+        {
             break;
+        }
+        else if (delete_select == 1)
+        {
+            printf("\n\t삭제할 순번 : ");
+            scanf_s("%d", &delete_idx, sizeof(delete_idx));
+        }
+        else if (delete_select == 2)
+        {
+            printf("\n\t삭제할 이름 : ");
+            scanf_s("%s", delete_name, sizeof(delete_name));
+        }
+        else if (delete_select == 3)
+        {
+            printf("\n\t삭제할 번호 : ");
+            scanf_s("%s", delete_number, sizeof(delete_number));
+        }
+        else
+        {
+            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            getchar();
+        }
+
+        // 버퍼 초기화
+        fflush(stdin);
 
         if (delete_select >= 1 && delete_select <= 3)
         {
-            if (delete_select == 1)
-            {
-                printf("\n\t삭제할 순번 : ");
-                scanf("%d", &delete_idx);
-                fflush(stdin);
-            }
-            else if (delete_select == 2)
-            {
-                printf("\n\t삭제할 이름 : ");
-                scanf("%s", delete_name);
-                fflush(stdin);
-            }
-            else if (delete_select == 3)
-            {
-                printf("\n\t삭제할 번호 : ");
-                scanf("%s", delete_number);
-                fflush(stdin);
-            }
-
             ptr = head;
 
             while (ptr != NULL)
@@ -483,12 +487,7 @@ void Delete()
             else
                 printf("\n\t[실패] 삭제할 대상이 없습니다. (엔터)");
 
-            getchar();
-            fflush(stdin);
-        }
-        else
-        {
-            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            // 버퍼 초기화
             getchar();
             fflush(stdin);
         }
@@ -504,14 +503,14 @@ void DeleteAll()
     while (1)
     {
         // 초기화
-        strcpy(answer, "");
+        memset(answer, 0, sizeof(answer));
 
         system("cls");
 
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ");
-        scanf("%s", answer);
+        scanf_s("%s", answer, sizeof(answer));
         fflush(stdin);
 
         if (strlen(answer) == 1 && strchr(answer, '0'))
@@ -530,6 +529,7 @@ void DeleteAll()
             idx_cnt = 0;
 
             printf("\n\t[성공] 전부 삭제 되었습니다. (엔터)");
+            // 버퍼 초기화
             getchar();
             fflush(stdin);
             break;
@@ -537,6 +537,7 @@ void DeleteAll()
         else
         {
             printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            // 버퍼 초기화
             getchar();
             fflush(stdin);
         }
