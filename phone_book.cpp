@@ -1,19 +1,28 @@
-// 헤더파일 선언
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <memory.h>
+/*
+    분할구현 추가
+    파일입출력 추가
+    XOR만을 사용한 데이터 암호화 복호화 추가
+    이후 데이터량 증가로 연산속도 저하시 데이터 구조 변경(양방향 선형 구조 -> 트리 구조)
 
-// 함수 선언
-void View();
-void Search();
-void Add();
-void Update();
-void Delete();
-void DeleteAll();
+    _fgets 보완(+ Add 유효성 검사)
+    (Add // 이름은 숫자 입력 불가 // 전화번호는 숫자만 입력 가능(하이픈 포함))
+    getchar(), fflush(stdin) 통합
 
-// 열거형 선언
-enum _e_menu_number
+    같은 파일 내 분할 구현
+
+    전체 설명 주석 추가
+    UI 수정
+    메뉴, 선택, 결과, 성공, 실패 구문 수정
+
+    종료시 동적 메모리 해제 기능 구현
+*/
+
+#include <iostream>
+#include <conio.h>  // getch
+#include <stdlib.h> // malloc, free, memset
+#include <string.h> // strlen, strcpy, strcmp
+
+enum e_MenuSelectNumber
 {
     MENU_0 = 48,
     MENU_1,
@@ -23,7 +32,6 @@ enum _e_menu_number
     MENU_5
 };
 
-// 구조체 선언
 struct Node
 {
     struct Node *prev;
@@ -33,26 +41,18 @@ struct Node
     struct Node *next;
 } *head, *tail, *ptr;
 
-// 전역변수 선언
-int idx_cnt;
+using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////// (잔버그 수정 이후)
-//////////////////////////////////////////////////////////////////////////////////////////////////// C++ 문법으로(git 커밋시 cpp 파일 분할확인)
-//////////////////////////////////////////////////////////////////////////////////////////////////// 분할구현 추가
-//////////////////////////////////////////////////////////////////////////////////////////////////// 파일입출력 추가
-//////////////////////////////////////////////////////////////////////////////////////////////////// XOR만을 사용한 데이터 암호화 복호화 추가
-//////////////////////////////////////////////////////////////////////////////////////////////////// 이후 데이터량 증가로 연산속도 저하시 데이터 구조 변경(양방향 선형 구조 -> 트리 구조)
+int g_idx_cnt;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////// 0-1. Search 함수 return형 함수로 변경 후 인자값(순번, 이름, 번호) 설정 후 주소 반환으로 변경
-//////////////////////////////////////////////////////////////////////////////////////////////////// 0-2. Search 함수 return 기능 추가 후 현재 단계에서 수정할 대상이 없다면 메시지 출력
-
-//////////////////////////////////////////////////////////////////////////////////////////////////// 전체 설명 주석 추가
-//////////////////////////////////////////////////////////////////////////////////////////////////// UI 수정
-//////////////////////////////////////////////////////////////////////////////////////////////////// 메뉴, 선택, 결과, 성공, 실패 구문 수정
-
-//////////////////////////////////////////////////////////////////////////////////////////////////// Add 함수 // 이름은 숫자 입력 불가 // 전화번호는 숫자만 입력 가능(하이픈까지)
-
-//////////////////////////////////////////////////////////////////////////////////////////////////// 종료시 동적 메모리 해제 기능 구현
+void _fgets(char *str, int count, FILE *stream);
+void View();
+Node *Search(int idx, char *name, char *number);
+void Search();
+void Add();
+void Update();
+void Delete();
+void DeleteAll();
 
 int main()
 {
@@ -72,7 +72,7 @@ int main()
         printf("▦ 1. 검색  ▦ 2. 추가  ▦ 3. 수정  ▦ 4. 삭제  ▦ 5. 전부삭제  ▦ 0. 종료  ▦\n");
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
-        select_menu = _getch();
+        select_menu = getch();
 
         switch (select_menu)
         {
@@ -95,7 +95,7 @@ int main()
             printf("프로그램을 종료합니다. (엔터)");
             getchar();
             fflush(stdin);
-            // head -> node . . . -> tail
+            /* head -> node . . . -> tail */
             // free();
             exit(0);
         default:
@@ -109,7 +109,13 @@ int main()
     return 0;
 }
 
-// View 함수 정의
+void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream)
+{
+    fgets(_Buffer, _MaxCount, _Stream);
+    _Buffer[strlen(_Buffer) - 1] = '\0';
+    fflush(_Stream);
+}
+
 void View()
 {
     printf("\tNo.\t이름\t\t전화번호\n\n");
@@ -119,23 +125,37 @@ void View()
     else
     {
         ptr = head;
-        idx_cnt = 0;
+        g_idx_cnt = 0;
 
         while (ptr != NULL)
         {
-            ptr->idx = ++idx_cnt;
+            ptr->idx = ++g_idx_cnt;
             printf("\t%-5d\t%-15s\t%-15s\n", ptr->idx, ptr->name, ptr->number);
             ptr = ptr->next;
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////// 0-1
+Node *Search(int idx, char *name, char *number)
+{
+    ptr = head;
 
-// Search 함수 정의
+    while (ptr != NULL)
+    {
+        if (ptr->idx == idx || strcmp(ptr->name, name) == 0 || strcmp(ptr->number, number) == 0)
+            break;
+
+        ptr = ptr->next;
+    }
+
+    if (ptr != NULL)
+        return ptr;
+
+    return 0;
+}
+
 void Search()
 {
-    // Search 지역변수 선언
     int search_select;
     int search_idx;
     char search_name[15];
@@ -154,7 +174,7 @@ void Search()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
-        scanf_s("%d", &search_select, sizeof(search_select));
+        fscanf(stdin, "%d", &search_select);
         fflush(stdin);
 
         if (search_select == 0)
@@ -164,17 +184,17 @@ void Search()
         else if (search_select == 1)
         {
             printf("\n\t검색할 순번 : ");
-            scanf_s("%d", &search_idx, sizeof(search_idx));
+            fscanf(stdin, "%d", &search_idx);
         }
         else if (search_select == 2)
         {
             printf("\n\t검색할 이름 : ");
-            scanf_s("%s", search_name, sizeof(search_name));
+            _fgets(search_name, sizeof(search_name), stdin);
         }
         else if (search_select == 3)
         {
             printf("\n\t검색할 번호 : ");
-            scanf_s("%s", search_number, sizeof(search_number));
+            _fgets(search_number, sizeof(search_number), stdin);
         }
         else
         {
@@ -187,17 +207,8 @@ void Search()
 
         if (search_select >= 1 && search_select <= 3)
         {
-            ptr = head;
-
-            while (ptr != NULL)
-            {
-                if ((search_select == 1 && ptr->idx == search_idx) || (search_select == 2 && strcmp(ptr->name, search_name) == 0) || (search_select == 3 && strcmp(ptr->number, search_number) == 0))
-                    break;
-
-                ptr = ptr->next;
-            }
-
-            if (ptr != NULL)
+            ptr = Search(search_idx, search_name, search_number);
+            if (ptr)
                 printf("\n\t[결과]\t%-5d\t%-15s\t%-15s (엔터)", ptr->idx, ptr->name, ptr->number);
             else
                 printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
@@ -209,10 +220,8 @@ void Search()
     }
 }
 
-// Add 함수 정의
 void Add()
 {
-    // Add 지역변수 선언
     char add_name[15];
     char add_number[15];
 
@@ -227,15 +236,13 @@ void Add()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    추가    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t이름(이전으로 0) : ");
-        scanf_s("%s", add_name, sizeof(add_name));
-        fflush(stdin);
+        _fgets(add_name, sizeof(add_name), stdin);
 
         if (strlen(add_name) == 1 && strchr(add_name, '0'))
             break;
 
         printf("\n\t전화번호(이전으로 0) : ");
-        scanf_s("%s", add_number, sizeof(add_number));
-        fflush(stdin);
+        _fgets(add_number, sizeof(add_number), stdin);
 
         if (strlen(add_number) == 1 && strchr(add_number, '0'))
             break;
@@ -243,7 +250,7 @@ void Add()
         // 유효성 검사
         if ((strlen(add_name) < 1 || strlen(add_name) > 14) || (strlen(add_number) < 1 || strlen(add_number) > 14))
         {
-            printf("\n\t[실패] 이름이나 전화번호는 영어 14자 또는 한글 7자를 넘을 수 없습니다. (엔터)");
+            printf("\n\t[실패] 이름이나 전화번호는 영어 13자 또는 한글 6자를 넘을 수 없습니다. (엔터)");
         }
         else
         {
@@ -260,7 +267,7 @@ void Add()
                 ptr->prev = tail;
             }
 
-            ptr->idx = ++idx_cnt;
+            ptr->idx = ++g_idx_cnt;
             strcpy(ptr->name, add_name);
             strcpy(ptr->number, add_number);
             ptr->next = NULL;
@@ -275,10 +282,8 @@ void Add()
     }
 }
 
-// Update 함수 정의
 void Update()
 {
-    // Update 지역변수 선언
     int update_select;
     int update_idx;
     char update_name[15];
@@ -301,7 +306,7 @@ void Update()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 선택  2. 이름 선택  3. 번호 선택  0. 이전으로 : ");
-        scanf_s("%d", &update_select, sizeof(update_select));
+        fscanf(stdin, "%d", &update_select);
         fflush(stdin);
 
         if (update_select == 0)
@@ -311,17 +316,17 @@ void Update()
         else if (update_select == 1)
         {
             printf("\n\t선택할 순번 : ");
-            scanf_s("%d", &update_idx, sizeof(update_idx));
+            fscanf(stdin, "%d", &update_idx);
         }
         else if (update_select == 2)
         {
             printf("\n\t선택할 이름 : ");
-            scanf_s("%s", update_name, sizeof(update_name));
+            _fgets(update_name, sizeof(update_name), stdin);
         }
         else if (update_select == 3)
         {
             printf("\n\t선택할 번호 : ");
-            scanf_s("%s", update_number, sizeof(update_number));
+            _fgets(update_number, sizeof(update_number), stdin);
         }
         else
         {
@@ -332,17 +337,25 @@ void Update()
         // 버퍼 초기화
         fflush(stdin);
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////// 0-2
-
         while (update_select >= 1 && update_select <= 3)
         {
+            ptr = Search(update_idx, update_name, update_number);
+            if (ptr == NULL)
+            {
+                printf("\n\t[실패] 수정할 대상이 없습니다. (엔터)");
+                // 버퍼 초기화
+                getchar();
+                fflush(stdin);
+                break;
+            }
+
             // 초기화
             update_new_select = 0;
             memset(update_new_name, 0, sizeof(update_new_name));
             memset(update_new_number, 0, sizeof(update_new_number));
 
             printf("\n\t1. 이름 수정  2. 번호 수정  0. 이전으로 : ");
-            scanf_s("%d", &update_new_select, sizeof(update_new_select));
+            fscanf(stdin, "%d", &update_new_select);
             fflush(stdin);
 
             if (update_new_select == 0)
@@ -352,12 +365,12 @@ void Update()
             else if (update_new_select == 1)
             {
                 printf("\n\t수정할 이름 : ");
-                scanf_s("%s", update_new_name, sizeof(update_new_name));
+                _fgets(update_new_name, sizeof(update_new_name), stdin);
             }
             else if (update_new_select == 2)
             {
                 printf("\n\t수정할 번호 : ");
-                scanf_s("%s", update_new_number, sizeof(update_new_number));
+                _fgets(update_new_number, sizeof(update_new_number), stdin);
             }
             else
             {
@@ -401,10 +414,8 @@ void Update()
     }
 }
 
-// Delete 함수 정의
 void Delete()
 {
-    // Delete 지역변수 선언
     int delete_select;
     int delete_idx;
     char delete_name[15];
@@ -423,7 +434,7 @@ void Delete()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
-        scanf_s("%d", &delete_select, sizeof(delete_select));
+        fscanf(stdin, "%d", &delete_select);
         fflush(stdin);
 
         if (delete_select == 0)
@@ -433,17 +444,17 @@ void Delete()
         else if (delete_select == 1)
         {
             printf("\n\t삭제할 순번 : ");
-            scanf_s("%d", &delete_idx, sizeof(delete_idx));
+            fscanf(stdin, "%d", &delete_idx);
         }
         else if (delete_select == 2)
         {
             printf("\n\t삭제할 이름 : ");
-            scanf_s("%s", delete_name, sizeof(delete_name));
+            _fgets(delete_name, sizeof(delete_name), stdin);
         }
         else if (delete_select == 3)
         {
             printf("\n\t삭제할 번호 : ");
-            scanf_s("%s", delete_number, sizeof(delete_number));
+            _fgets(delete_number, sizeof(delete_number), stdin);
         }
         else
         {
@@ -480,7 +491,7 @@ void Delete()
                         ptr->next->prev = ptr->prev;
                     }
                     free(ptr);
-                    --idx_cnt;
+                    --g_idx_cnt;
                     break;
                 }
 
@@ -499,10 +510,8 @@ void Delete()
     }
 }
 
-// DeleteAll 함수 정의
 void DeleteAll()
 {
-    // DeleteAll 지역변수 선언
     char answer[10];
 
     while (1)
@@ -515,8 +524,7 @@ void DeleteAll()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ");
-        scanf_s("%s", answer, sizeof(answer));
-        fflush(stdin);
+        _fgets(answer, sizeof(answer), stdin);
 
         if (strlen(answer) == 1 && strchr(answer, '0'))
             break;
@@ -531,7 +539,7 @@ void DeleteAll()
                 free(ptr);
                 ptr = tail;
             }
-            idx_cnt = 0;
+            g_idx_cnt = 0;
 
             printf("\n\t[성공] 전부 삭제 되었습니다. (엔터)");
             // 버퍼 초기화
