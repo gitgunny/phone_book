@@ -4,10 +4,6 @@
     XOR만을 사용한 데이터 암호화 복호화 추가
     이후 데이터량 증가로 연산속도 저하시 데이터 구조 변경(양방향 선형 구조 -> 트리 구조)
 
-    _fgets 보완(+ Add 유효성 검사)
-    (Add // 이름은 숫자 입력 불가 // 전화번호는 숫자만 입력 가능(하이픈 포함))
-    getchar(), fflush(stdin) 통합
-
     같은 파일 내 분할 구현
 
     전체 설명 주석 추가
@@ -15,6 +11,9 @@
     메뉴, 선택, 결과, 성공, 실패 구문 수정
 
     종료시 동적 메모리 해제 기능 구현
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 */
 
 #include <iostream>
@@ -37,7 +36,7 @@ struct Node
     struct Node *prev;
     int idx;
     char name[15];
-    char number[15];
+    char number[20];
     struct Node *next;
 } *head, *tail, *ptr;
 
@@ -45,7 +44,14 @@ using namespace std;
 
 int g_idx_cnt;
 
-void _fgets(char *str, int count, FILE *stream);
+void _getchar();
+void _fscanf(FILE *_Stream, const char *_Format, ...);
+void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream);
+
+int CheckLength(const char *string, int min_length, int max_length);
+int CheckName(const char *name);
+int CheckNumber(const char *number);
+
 void View();
 Node *Search(int idx, char *name, char *number);
 void Search();
@@ -93,15 +99,13 @@ int main()
             break;
         case MENU_0:
             printf("프로그램을 종료합니다. (엔터)");
-            getchar();
-            fflush(stdin);
+            _getchar();
             /* head -> node . . . -> tail */
             // free();
             exit(0);
         default:
             printf("잘못 입력 하셨습니다. 다시 입력 해주세요 (엔터)");
-            getchar();
-            fflush(stdin);
+            _getchar();
             break;
         }
     }
@@ -109,11 +113,53 @@ int main()
     return 0;
 }
 
+void _getchar()
+{
+    getchar();
+    fflush(stdin);
+}
+
+void _fscanf(FILE *_Stream, const char *_Format, ...)
+{
+    fscanf(_Stream, _Format);
+    fflush(_Stream);
+}
+
 void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream)
 {
     fgets(_Buffer, _MaxCount, _Stream);
     _Buffer[strlen(_Buffer) - 1] = '\0';
     fflush(_Stream);
+}
+
+int CheckLength(const char *string, int min_length, int max_length)
+{
+    if (strlen(string) < min_length || strlen(string) > max_length)
+        return 1;
+
+    return 0;
+}
+
+int CheckName(const char *name)
+{
+    for (int i = 0; i < strlen(name); i++)
+    {
+        if (name[i] >= '0' && name[i] <= '9')
+            return 1;
+    }
+
+    return 0;
+}
+
+int CheckNumber(const char *number)
+{
+    for (int i = 0; i < strlen(number); i++)
+    {
+        if (!(number[i] == '-' || number[i] >= '0' && number[i] <= '9'))
+            return 1;
+    }
+
+    return 0;
 }
 
 void View()
@@ -174,8 +220,7 @@ void Search()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
-        fscanf(stdin, "%d", &search_select);
-        fflush(stdin);
+        _fscanf(stdin, "%d", &search_select);
 
         if (search_select == 0)
         {
@@ -184,7 +229,7 @@ void Search()
         else if (search_select == 1)
         {
             printf("\n\t검색할 순번 : ");
-            fscanf(stdin, "%d", &search_idx);
+            _fscanf(stdin, "%d", &search_idx);
         }
         else if (search_select == 2)
         {
@@ -199,11 +244,8 @@ void Search()
         else
         {
             printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-            getchar();
+            _getchar();
         }
-
-        // 버퍼 초기화
-        fflush(stdin);
 
         if (search_select >= 1 && search_select <= 3)
         {
@@ -213,9 +255,7 @@ void Search()
             else
                 printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
 
-            // 버퍼 초기화
-            getchar();
-            fflush(stdin);
+            _getchar();
         }
     }
 }
@@ -223,7 +263,7 @@ void Search()
 void Add()
 {
     char add_name[15];
-    char add_number[15];
+    char add_number[20];
 
     while (1)
     {
@@ -247,11 +287,10 @@ void Add()
         if (strlen(add_number) == 1 && strchr(add_number, '0'))
             break;
 
-        // 유효성 검사
-        if ((strlen(add_name) < 1 || strlen(add_name) > 14) || (strlen(add_number) < 1 || strlen(add_number) > 14))
-        {
-            printf("\n\t[실패] 이름이나 전화번호는 영어 13자 또는 한글 6자를 넘을 수 없습니다. (엔터)");
-        }
+        if (CheckLength(add_name, 1, 12) || CheckName(add_name))
+            printf("\n\t[실패] 이름은 영어나 한글만 입력할 수 있고 영어 12자 또는 한글 6자를 넘을 수 없습니다. (엔터)");
+        else if (CheckLength(add_number, 1, 15) || CheckNumber(add_number))
+            printf("\n\t[실패] 전화번호는 숫자(하이픈(-) 포함) 15자까지만 입력 할 수 있습니다. (엔터)");
         else
         {
             ptr = (struct Node *)malloc(sizeof(struct Node));
@@ -276,9 +315,7 @@ void Add()
 
             printf("\n\t[성공] 추가 되었습니다. (엔터)");
         }
-        // 버퍼 초기화
-        getchar();
-        fflush(stdin);
+        _getchar();
     }
 }
 
@@ -306,8 +343,7 @@ void Update()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 선택  2. 이름 선택  3. 번호 선택  0. 이전으로 : ");
-        fscanf(stdin, "%d", &update_select);
-        fflush(stdin);
+        _fscanf(stdin, "%d", &update_select);
 
         if (update_select == 0)
         {
@@ -316,7 +352,7 @@ void Update()
         else if (update_select == 1)
         {
             printf("\n\t선택할 순번 : ");
-            fscanf(stdin, "%d", &update_idx);
+            _fscanf(stdin, "%d", &update_idx);
         }
         else if (update_select == 2)
         {
@@ -331,11 +367,8 @@ void Update()
         else
         {
             printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-            getchar();
+            _getchar();
         }
-
-        // 버퍼 초기화
-        fflush(stdin);
 
         while (update_select >= 1 && update_select <= 3)
         {
@@ -343,9 +376,7 @@ void Update()
             if (ptr == NULL)
             {
                 printf("\n\t[실패] 수정할 대상이 없습니다. (엔터)");
-                // 버퍼 초기화
-                getchar();
-                fflush(stdin);
+                _getchar();
                 break;
             }
 
@@ -355,8 +386,7 @@ void Update()
             memset(update_new_number, 0, sizeof(update_new_number));
 
             printf("\n\t1. 이름 수정  2. 번호 수정  0. 이전으로 : ");
-            fscanf(stdin, "%d", &update_new_select);
-            fflush(stdin);
+            _fscanf(stdin, "%d", &update_new_select);
 
             if (update_new_select == 0)
             {
@@ -375,11 +405,8 @@ void Update()
             else
             {
                 printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-                getchar();
+                _getchar();
             }
-
-            // 버퍼 초기화
-            fflush(stdin);
 
             if (update_new_select >= 1 && update_new_select <= 2)
             {
@@ -405,9 +432,7 @@ void Update()
                 else
                     printf("\n\t[실패] 수정할 대상이 없습니다. (엔터)");
 
-                // 버퍼 초기화
-                getchar();
-                fflush(stdin);
+                _getchar();
                 break;
             }
         }
@@ -434,8 +459,7 @@ void Delete()
         printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
-        fscanf(stdin, "%d", &delete_select);
-        fflush(stdin);
+        _fscanf(stdin, "%d", &delete_select);
 
         if (delete_select == 0)
         {
@@ -444,7 +468,7 @@ void Delete()
         else if (delete_select == 1)
         {
             printf("\n\t삭제할 순번 : ");
-            fscanf(stdin, "%d", &delete_idx);
+            _fscanf(stdin, "%d", &delete_idx);
         }
         else if (delete_select == 2)
         {
@@ -459,11 +483,8 @@ void Delete()
         else
         {
             printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-            getchar();
+            _getchar();
         }
-
-        // 버퍼 초기화
-        fflush(stdin);
 
         if (delete_select >= 1 && delete_select <= 3)
         {
@@ -503,9 +524,7 @@ void Delete()
             else
                 printf("\n\t[실패] 삭제할 대상이 없습니다. (엔터)");
 
-            // 버퍼 초기화
-            getchar();
-            fflush(stdin);
+            _getchar();
         }
     }
 }
@@ -542,17 +561,13 @@ void DeleteAll()
             g_idx_cnt = 0;
 
             printf("\n\t[성공] 전부 삭제 되었습니다. (엔터)");
-            // 버퍼 초기화
-            getchar();
-            fflush(stdin);
+            _getchar();
             break;
         }
         else
         {
             printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-            // 버퍼 초기화
-            getchar();
-            fflush(stdin);
+            _getchar();
         }
     }
 }
