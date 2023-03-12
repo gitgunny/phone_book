@@ -10,7 +10,7 @@
     UI 수정
     메뉴, 선택, 결과, 성공, 실패 구문 수정
 
-    종료시 동적 메모리 해제 기능 구현
+    종료시 동적 메모리 해제 기능 구현s
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,6 +20,8 @@
 #include <conio.h>  // getch
 #include <stdlib.h> // malloc, free, memset
 #include <string.h> // strlen, strcpy, strcmp
+#include "phone_book.h"
+
 
 enum e_MenuSelectNumber
 {
@@ -43,10 +45,6 @@ struct Node
 using namespace std;
 
 int g_idx_cnt;
-
-void _getchar();
-void _fscanf(FILE *_Stream, const char *_Format, ...);
-void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream);
 
 int CheckLength(const char *string, int min_length, int max_length);
 int CheckName(const char *name);
@@ -111,25 +109,6 @@ int main()
     }
 
     return 0;
-}
-
-void _getchar()
-{
-    getchar();
-    fflush(stdin);
-}
-
-void _fscanf(FILE *_Stream, const char *_Format, ...)
-{
-    fscanf(_Stream, _Format);
-    fflush(_Stream);
-}
-
-void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream)
-{
-    fgets(_Buffer, _MaxCount, _Stream);
-    _Buffer[strlen(_Buffer) - 1] = '\0';
-    fflush(_Stream);
 }
 
 int CheckLength(const char *string, int min_length, int max_length)
