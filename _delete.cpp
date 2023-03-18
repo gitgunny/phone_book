@@ -16,9 +16,7 @@ void PhoneBook::Delete()
 		memset(delete_name, '\0', sizeof(delete_name));
 		memset(delete_number, '\0', sizeof(delete_number));
 
-		system("cls");
-
-		printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+		printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    삭제    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
 		printf("\n\t1. 순번 삭제  2. 이름 삭제  3. 번호 삭제  0. 이전으로 : ");
 		select_delete = _getch();
@@ -66,7 +64,7 @@ void PhoneBook::Delete()
 	}
 }
 
-int PhoneBook::Delete(PBData *_pPBData)
+int PhoneBook::Delete(const PBData *_pPBData)
 {
 	if (_pPBData != nullptr)
 	{

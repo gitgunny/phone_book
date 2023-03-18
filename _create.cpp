@@ -1,6 +1,6 @@
 #include "phone_book.h"
 
-// 최소 글자수와 최대 글자수의 범위를 초과하면 1 반환
+// 문자열의 최소 글자수와 최대 글자수의 범위를 초과하면 1 반환
 int CheckLength(const char *_string, int _min_length, int _max_length)
 {
 	if (strlen(_string) < _min_length || strlen(_string) > _max_length)
@@ -31,9 +31,7 @@ void PhoneBook::Create()
 		memset(create_name, '\0', sizeof(create_name));
 		memset(create_number, '\0', sizeof(create_number));
 
-		system("cls");
-
-		printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    추가    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+		printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    추가    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
 		printf("\n\t이름(이전으로 0) : ");
 		_fgets(create_name, sizeof(create_name), stdin);
@@ -57,16 +55,16 @@ void PhoneBook::Create()
 			printf("\n\t[실패] 전화번호는 숫자(하이픈(-) 포함)만 입력할 수 있고 %d자를 넘을 수 없습니다. (엔터)", number_max_len - 3);
 		else
 		{
-			CreateBack(create_name, create_number);
+			PushBack(create_name, create_number);
 			printf("\n\t[성공] 추가 되었습니다. (엔터)");
 		}
 		_getchar();
 	}
 }
 
-void PhoneBook::CreateFirst(const char *_name, const char *_number)
+void PhoneBook::PushFirst(const char *_name, const char *_number)
 {
-	PBData *pPBData = new PBData[1];
+	PBData *pPBData = new PBData;
 
 	pPBData->prev = nullptr;
 	max_idx++;
@@ -78,15 +76,15 @@ void PhoneBook::CreateFirst(const char *_name, const char *_number)
 	tail = pPBData;
 }
 
-void PhoneBook::CreateBack(const char *_name, const char *_number)
+void PhoneBook::PushBack(const char *_name, const char *_number)
 {
 	if (head == nullptr)
 	{
-		CreateFirst(_name, _number);
+		PushFirst(_name, _number);
 		return;
 	}
 
-	PBData *pPBData = new PBData[1];
+	PBData *pPBData = new PBData;
 
 	pPBData->prev = tail;
 	max_idx++;
@@ -98,15 +96,15 @@ void PhoneBook::CreateBack(const char *_name, const char *_number)
 	tail = pPBData;
 }
 
-void PhoneBook::CreateFront(const char *_name, const char *_number)
+void PhoneBook::PushFront(const char *_name, const char *_number)
 {
 	if (head == nullptr)
 	{
-		CreateFirst(_name, _number);
+		PushFirst(_name, _number);
 		return;
 	}
 
-	PBData *pPBData = new PBData[1];
+	PBData *pPBData = new PBData;
 
 	pPBData->prev = nullptr;
 	max_idx++;

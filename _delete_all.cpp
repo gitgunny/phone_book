@@ -8,9 +8,7 @@ void PhoneBook::DeleteAll()
 	{
 		memset(answer, 0, sizeof(answer));
 
-		system("cls");
-
-		printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+		printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
 		printf("\n\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ");
 		_fgets(answer, sizeof(answer), stdin);
@@ -36,7 +34,7 @@ void PhoneBook::DeleteAll()
 	}
 }
 
-int PhoneBook::DeleteAll(PhoneBook *_phone_book)
+int PhoneBook::DeleteAll(const PhoneBook *_phone_book)
 {
 	if (head != nullptr)
 	{

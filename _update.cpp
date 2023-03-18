@@ -20,9 +20,7 @@ void PhoneBook::Update()
 		memset(update_name, '\0', sizeof(update_name));
 		memset(update_number, '\0', sizeof(update_number));
 
-		system("cls");
-
-		printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+		printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    수정    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
 		printf("\n\t1. 순번 선택  2. 이름 선택  3. 번호 선택  0. 이전으로 : ");
 		select_update = _getch();

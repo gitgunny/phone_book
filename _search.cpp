@@ -15,9 +15,7 @@ void PhoneBook::Search()
 		memset(search_name, '\0', sizeof(search_name));
 		memset(search_number, '\0', sizeof(search_number));
 
-		system("cls");
-
-		printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+		printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
 		printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
 		select_search = _getch();

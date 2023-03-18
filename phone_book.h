@@ -26,6 +26,12 @@ struct PBData
 	PBData *next;
 };
 
+struct NameNumber
+{
+	char name[name_max_len];
+	char number[number_max_len];
+};
+
 class PhoneBook
 {
 public:
@@ -38,6 +44,8 @@ private:
 	PBData *tail;
 
 public:
+	void ReadFile();
+	void WriteFile();
 	void Show(); // Search 연동 가능?
 	void Search();
 	void Create();
@@ -45,21 +53,30 @@ public:
 	void Delete();
 	void DeleteAll();
 
+public:
+	// 공개 : 연산자 오버로딩 선언
+	PhoneBook &operator<(const NameNumber &_name_number);  // < 연산자 오버로딩 시 PushBack
+	PhoneBook &operator<<(const NameNumber &_name_number); // << 연산자 오버로딩 시 PushFront
+	PhoneBook &operator>(const PBData *_pPBData);		   // > 연산자 오버로딩 시 Delete
+	PhoneBook &operator>>(const PhoneBook *_phone_book);   // >> 연산자 오버로딩 시 DeleteAll
+	PhoneBook &operator*(const NameNumber &_name_number);  // * 연산자 오버로딩 시 Search(Address)
+	PhoneBook &operator&(const NameNumber &_name_number);  // & 연산자 오버로딩 시 Search(Reference)
+
 private:
 	PBData *SearchIdx(const int *_idx);
 	PBData *SearchName(const char *_name);
 	PBData *SearchNumber(const char *_number);
 
-	void CreateFirst(const char *_name, const char *_number);
-	void CreateBack(const char *_name, const char *_number);
-	void CreateFront(const char *_name, const char *_number);
+	void PushFirst(const char *_name, const char *_number);
+	void PushBack(const char *_name, const char *_number);
+	void PushFront(const char *_name, const char *_number);
 
 	int UpdateName(PBData *_pPBData, const char *_name);
 	int UpdateNumber(PBData *_pPBData, const char *_number);
 
-	int Delete(PBData *_pPBData);
+	int Delete(const PBData *_pPBData);
 
-	int DeleteAll(PhoneBook *_phone_book);
+	int DeleteAll(const PhoneBook *_phone_book);
 };
 
 void _getchar();										  // 엔터 입력용(버퍼 비우기 포함)

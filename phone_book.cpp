@@ -24,24 +24,58 @@ void _fgets(char *_Buffer, int _MaxCount, FILE *_Stream)
 
 PhoneBook::PhoneBook() : max_idx(0), head(nullptr), tail(nullptr)
 {
+	ReadFile();
 }
 
 PhoneBook::~PhoneBook()
 {
-	if (head != nullptr)
-	{
-		PBData *pPBData = head;
-		PBData *pTmpPBData = nullptr;
+	WriteFile();
+}
 
-		while (pPBData != nullptr)
-		{
-			pTmpPBData = pPBData->next;
-			delete pPBData;
-			pPBData = pTmpPBData;
-		}
+// < 연산자 오버로딩 시 PushBack
+PhoneBook &PhoneBook::operator<(const NameNumber &_name_number)
+{
+	PushBack(_name_number.name, _name_number.number);
 
-		max_idx = 0;
-		head = nullptr;
-		tail = nullptr;
-	}
+	return *this;
+}
+
+// << 연산자 오버로딩 시 PushFront
+PhoneBook &PhoneBook::operator<<(const NameNumber &_name_number)
+{
+	PushFront(_name_number.name, _name_number.number);
+
+	return *this;
+}
+
+// > 연산자 오버로딩 시 Delete
+PhoneBook &PhoneBook::operator>(const PBData *_pPBData)
+{
+	Delete(_pPBData);
+
+	return *this;
+}
+
+// >> 연산자 오버로딩 시 DeleteAll
+PhoneBook &PhoneBook::operator>>(const PhoneBook *_phone_book)
+{
+	DeleteAll(_phone_book);
+
+	return *this;
+}
+//
+//
+//
+//
+//
+// * 연산자 오버로딩 시 Search(Address)
+PhoneBook &PhoneBook::operator*(const NameNumber &_name_number)
+{
+	return *this;
+}
+
+// & 연산자 오버로딩 시 Search(Reference)
+PhoneBook &PhoneBook::operator&(const NameNumber &_name_number)
+{
+	return *this;
 }
