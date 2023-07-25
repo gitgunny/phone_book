@@ -2,7 +2,7 @@
 
 void PhoneBook::ReadFile()
 {
-    FILE *fp = fopen("phone_book.pb", "rt");
+    FILE* fp = fopen("phone_book.pb", "rt");
 
     int max_idx;
     char name[name_max_len];
@@ -20,12 +20,12 @@ void PhoneBook::ReadFile()
 
 void PhoneBook::WriteFile()
 {
-    FILE *fp = fopen("phone_book.pb", "wt");
+    FILE* fp = fopen("phone_book.pb", "wt");
 
     if (head != nullptr)
     {
-        PBData *pPBData = head;
-        PBData *pTmpPBData = nullptr;
+        PBData* pPBData = head;
+        PBData* pTmpPBData = nullptr;
 
         fprintf(fp, "%d\n", max_idx);
         while (pPBData != nullptr)
