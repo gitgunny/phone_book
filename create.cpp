@@ -1,11 +1,21 @@
 #include "phone_book.h"
 
+bool isNum(const string& str)
+{
+    for (char const& let : str)
+        if (std::isdigit(let) == 1)
+            return false;
+
+    return true;
+}
+
 void PhoneBook::Create()
 {
     string create_name, create_number;
 
     while (1)
     {
+        Show();
         cout << "\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    추가    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n";
 
         cout << "\n\t이름(이전으로 0) : ";
@@ -13,78 +23,63 @@ void PhoneBook::Create()
 
         if (create_name.length() == 1 && (create_name.find("0") != string::npos))
             break;
-
-        /* 이름 전화번호 입력 즉시 실패 메시지 출력 여부 판단 추가 */
+        if (create_name.length() > name_max_len)
+        {
+            cout << "\n\t[실패] 이름은 영어 " << name_max_len << "자 또는 한글 " << name_max_len / 2 << "자를 초과할 수 없습니다. (엔터)";
+            _getchar();
+            continue;
+        }
 
         cout << "\n\t전화번호(이전으로 0) : ";
         cin >> create_number;
 
         if (create_number.length() == 1 && (create_number.find("0") != string::npos))
             break;
-
-        if (create_name.length() > name_max_len)
-            printf("\n\t[실패] 이름은 영어 %d자 또는 한글 %d자를 초과할 수 없습니다. (엔터)", name_max_len, name_max_len / 2);
-        else if (create_number.length() > number_max_len)
-            printf("\n\t[실패] 전화번호는 숫자 %d자를 초과할 수 없습니다. (엔터)", number_max_len);
-        else
+        if (create_number.length() > number_max_len || isNum(create_number))
         {
-            PushBack(create_name, create_number);
-            printf("\n\t[성공] 추가 되었습니다. (엔터)");
+            cout << "\n\t[실패] 전화번호는 숫자 " << number_max_len << "자를 초과할 수 없습니다. (엔터)";
+            _getchar();
+            continue;
         }
+
+        PushBack(create_name, create_number);
+        cout << "\n\t[성공] 추가 되었습니다. (엔터)";
         _getchar();
     }
 }
 
-void PhoneBook::PushFirst(const string& _name, const string& _number)
-{
-    PBData* pPBData = new PBData;
-
-    pPBData->prev = nullptr;
-    max_idx++;
-    pPBData->name = _name;
-    pPBData->number = _number;
-    pPBData->next = nullptr;
-
-    head = pPBData;
-    tail = pPBData;
-}
-
 void PhoneBook::PushBack(const string& _name, const string& _number)
 {
+    PBData* pPBData = new PBData(_name, _number);
+
     if (head == nullptr)
     {
-        PushFirst(_name, _number);
-        return;
+        head = pPBData;
+        tail = pPBData;
+    }
+    else
+    {
+        pPBData->prev = tail;
+        tail->next = pPBData;
+        tail = pPBData;
     }
 
-    PBData* pPBData = new PBData;
-
-    pPBData->prev = tail;
     max_idx++;
-    pPBData->name = _name;
-    pPBData->number = _number;
-    pPBData->next = nullptr;
-
-    pPBData->prev->next = pPBData;
-    tail = pPBData;
 }
 
 void PhoneBook::PushFront(const string& _name, const string& _number)
 {
+    PBData* pPBData = new PBData(_name, _number);
+
     if (head == nullptr)
     {
-        PushFirst(_name, _number);
-        return;
+        head = pPBData;
+        tail = pPBData;
     }
-
-    PBData* pPBData = new PBData;
-
-    pPBData->prev = nullptr;
-    max_idx++;
-    pPBData->name = _name;
-    pPBData->number = _number;
-    pPBData->next = head;
-
-    pPBData->next->prev = pPBData;
-    head = pPBData;
+    else
+    {
+        pPBData->next = head;
+        head->prev = pPBData;
+        head = pPBData;
+    }
 }

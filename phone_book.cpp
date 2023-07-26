@@ -9,9 +9,21 @@
 * update.cpp : 이름 전화번호 제한 조건 추가(CheckLength, CheckNumber 이용)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-모든 매개변수 포인터 참조 -> 레퍼런스 참조 변경 및 최적화
-string 클래스 추가로 오버플로우 해결
-create 이름 전화번호 입력 즉시 무결성 확인(하이픈 확인 포함)(진행중)
+show.cpp : C++ 스타일화
+create.cpp : 이름 전화번호 입력 즉시 무결성 확인
+create.cpp : C++ 스타일화
+create.cpp : create 관련 멤버함수 수정
+phonebook.h : PBData 생성자 추가(create 최적화)
+
+(예정)
+show.cpp : 정렬 맞추기
+updata.cpp : C++ 스타일화
+
+delete.cpp : delete_all 합치기
+delete_all.cpp
+
+search.cpp
+common.cpp : 연산자 오버로딩 Search만 활성화
 
 (이후 재활성화)
 파일 입출력 기능 비활성화
@@ -35,9 +47,10 @@ int main()
 
     while (1)
     {
-        system("cls");
-
-        phone_book.Show(MAIN);
+        phone_book.Show();
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+        printf("▦ 1. 검색  ▦ 2. 추가  ▦ 3. 수정  ▦ 4. 삭제  ▦ 5. 전부삭제  ▦ 0. 종료  ▦\n");
+        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
 
         switch (select_menu = _getch())
         {

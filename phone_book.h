@@ -2,8 +2,8 @@
 
 #include <conio.h> // getch
 #include <iostream>
-#include <string>
 #include <string.h> // strlen, strcpy, strcmp
+#include <string>
 
 enum
 {
@@ -12,14 +12,14 @@ enum
     MENU_2,
     MENU_3,
     MENU_4,
-    MENU_5,
-    MAIN
+    MENU_5
 };
 
+using std::cin;
 using std::cout;
 using std::endl;
-using std::cin;
 using std::string;
+
 const unsigned int name_max_len = 15;
 const unsigned int number_max_len = 20;
 
@@ -28,11 +28,12 @@ class PBData
 public:
     PBData* prev;
     int idx;
-    // char name[name_max_len];
     string name;
-    // char number[number_max_len];
     string number;
     PBData* next;
+
+public:
+    PBData(const string& _name, const string& _number) : prev(nullptr), name(_name), number(_number), next(nullptr) {}
 };
 
 class PhoneBook
@@ -48,7 +49,7 @@ public:
     void WriteFile(); /////
 
     // show.cpp
-    void Show(const int& menu);
+    void Show();
 
     // search.cpp
     void Search();
@@ -68,7 +69,6 @@ private:
     PBData* SearchName(const string& _name);
     PBData* SearchNumber(const string& _number);
 
-    void PushFirst(const string& _name, const string& _number);
     void PushBack(const string& _name, const string& _number);
     void PushFront(const string& _name, const string& _number);
 
