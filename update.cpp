@@ -32,7 +32,7 @@ void PhoneBook::Update()
             printf("\n\n\t선택할 순번 : ");
             _fscanf(stdin, "%d", &update_idx);
 
-            pPBData = SearchIdx(&update_idx);
+            pPBData = SearchIdx(update_idx);
         }
         else if (select_update == MENU_2)
         {
@@ -105,11 +105,12 @@ void PhoneBook::Update()
 
 /* 이름 전화번호 제한 조건 추가(Create의 CheckLength, CheckNumber 이용) */
 
-int PhoneBook::UpdateName(PBData* _pPBData, const char* _name)
+int PhoneBook::UpdateName(PBData* _pPBData, const string& _name)
 {
     if (_pPBData != nullptr)
     {
-        strcpy(_pPBData->name, _name);
+        // strcpy(_pPBData->name, _name);
+        _pPBData->name = _name;
 
         return 1;
     }
@@ -117,11 +118,12 @@ int PhoneBook::UpdateName(PBData* _pPBData, const char* _name)
     return 0;
 }
 
-int PhoneBook::UpdateNumber(PBData* _pPBData, const char* _number)
+int PhoneBook::UpdateNumber(PBData* _pPBData, const string& _number)
 {
     if (_pPBData != nullptr)
     {
-        strcpy(_pPBData->number, _number);
+        // strcpy(_pPBData->number, _number);
+        _pPBData->number = _number;
 
         return 1;
     }

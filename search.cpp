@@ -27,7 +27,7 @@ void PhoneBook::Search()
             printf("\n\n\t검색할 순번 : ");
             _fscanf(stdin, "%d", &search_idx);
 
-            pPBData = SearchIdx(&search_idx);
+            pPBData = SearchIdx(search_idx);
         }
         else if (select_search == MENU_2)
         {
@@ -63,13 +63,13 @@ void PhoneBook::Search()
 
 /* 중복 찾기 기능 추가(이후 중복 데이터 선택 후 수정, 삭제 기능 추가) */
 
-PBData* PhoneBook::SearchIdx(const int* _idx)
+PBData* PhoneBook::SearchIdx(const int& _idx)
 {
     PBData* pPBData = head;
 
     while (pPBData != NULL)
     {
-        if (pPBData->idx == *_idx)
+        if (pPBData->idx == _idx)
             return pPBData;
 
         pPBData = pPBData->next;
@@ -78,13 +78,14 @@ PBData* PhoneBook::SearchIdx(const int* _idx)
     return nullptr;
 }
 
-PBData* PhoneBook::SearchName(const char* _name)
+PBData* PhoneBook::SearchName(const string& _name)
 {
     PBData* pPBData = head;
 
     while (pPBData != NULL)
     {
-        if (strcmp(pPBData->name, _name) == 0)
+        // if (strcmp(pPBData->name, _name) == 0)
+        if (pPBData->name.find(_name))
             return pPBData;
 
         pPBData = pPBData->next;
@@ -93,13 +94,14 @@ PBData* PhoneBook::SearchName(const char* _name)
     return nullptr;
 }
 
-PBData* PhoneBook::SearchNumber(const char* _number)
+PBData* PhoneBook::SearchNumber(const string& _number)
 {
     PBData* pPBData = head;
 
     while (pPBData != NULL)
     {
-        if (strcmp(pPBData->number, _number) == 0)
+        // if (strcmp(pPBData->number, _number) == 0)
+        if (pPBData->number.find(_number))
             return pPBData;
 
         pPBData = pPBData->next;

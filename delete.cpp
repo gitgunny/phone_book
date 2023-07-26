@@ -28,7 +28,7 @@ void PhoneBook::Delete()
             printf("\n\n\t삭제할 순번 : ");
             _fscanf(stdin, "%d", &delete_idx);
 
-            pPBData = SearchIdx(&delete_idx);
+            pPBData = SearchIdx(delete_idx);
         }
         else if (select_delete == MENU_2)
         {

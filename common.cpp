@@ -2,9 +2,9 @@
 
 void _getchar()
 {
-    getchar();
     fflush(stdin); // 출력 버퍼 비우기
     rewind(stdin); // 입력 버퍼 비우기
+    getchar();
 }
 
 void _fscanf(FILE* _Stream, const char* _Format, ...)
