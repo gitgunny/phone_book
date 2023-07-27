@@ -52,7 +52,7 @@ void PhoneBook::Delete()
 
         if (select_delete >= MENU_1 && select_delete <= MENU_3)
         {
-            if (Delete(pPBData))
+            if (DeletePBData(pPBData))
             {
                 printf("\n\t[성공] 삭제 되었습니다. (엔터)");
             }
@@ -64,7 +64,7 @@ void PhoneBook::Delete()
     }
 }
 
-int PhoneBook::Delete(const PBData* _pPBData)
+int PhoneBook::DeletePBData(const PBData* _pPBData)
 {
     if (_pPBData != nullptr)
     {

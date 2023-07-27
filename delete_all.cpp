@@ -2,58 +2,46 @@
 
 void PhoneBook::DeleteAll()
 {
-    char answer[10];
+    string answer;
 
     while (1)
     {
-        memset(answer, 0, sizeof(answer));
+        Show();
+        cout << endl << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
 
-        printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎  전부삭제  ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+        cout << endl << "\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ";
+        cin >> answer;
 
-        printf("\n\t전부 삭제를 원하실 경우 \"전부삭제\"를 입력 해주세요(이전으로 0) : ");
-        _fgets(answer, sizeof(answer), stdin);
-
-        if (strlen(answer) == 1 && strchr(answer, '0'))
+        if (answer.length() == 1 && (answer.find('0') != string::npos))
             break;
 
-        if (strcmp(answer, "전부삭제") == 0)
+        if (answer.find("전부삭제") == string::npos)
         {
-            if (DeleteAll(this))
-                printf("\n\t[성공] 전부 삭제 되었습니다. (엔터)");
-            else
-                printf("\n\t[실패] 삭제할 데이터가 없습니다. (엔터)");
+            cout << endl << "\t[실패] 잘못 입력 하셨습니다. (엔터)";
+            _getchar();
+            continue;
+        }
 
-            _getchar();
-            break;
-        }
-        else
-        {
-            printf("\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
-            _getchar();
-        }
+        DeletePhoneBook();
+        cout << endl << "\t[성공] 전부 삭제 되었습니다. (엔터)";
+        _getchar();
+        break;
     }
 }
 
-int PhoneBook::DeleteAll(const PhoneBook* _phone_book)
+void PhoneBook::DeletePhoneBook()
 {
-    if (head != nullptr)
+    PBData* pPBData = head;
+    PBData* pTemp = nullptr;
+
+    while (pPBData != nullptr)
     {
-        PBData* pPBData = head;
-        PBData* pTmpPBData = nullptr;
-
-        while (pPBData != nullptr)
-        {
-            pTmpPBData = pPBData->next;
-            delete pPBData;
-            pPBData = pTmpPBData;
-        }
-
-        max_idx = 0;
-        head = nullptr;
-        tail = nullptr;
-
-        return 1;
+        pTemp = pPBData->next;
+        delete pPBData;
+        pPBData = pTemp;
     }
-    else
-        return 0;
+
+    max_idx = 0;
+    head = nullptr;
+    tail = nullptr;
 }

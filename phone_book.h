@@ -1,10 +1,10 @@
 #pragma once
 
-#include <conio.h> // getch
-#include <iostream>
-#include <iomanip>
-#include <string.h> // strlen, strcpy, strcmp
-#include <string>
+#include <conio.h>  // getch
+#include <iomanip>  // setw
+#include <iostream> // cin, cout, endl
+#include <string.h> // strlen, strcpy, strcmp(삭제 예정)
+#include <string>   // string
 
 enum
 {
@@ -39,15 +39,17 @@ public:
 
 class PhoneBook
 {
+    // 비공개 : 멤버 변수
 private:
     int max_idx;
     PBData* head;
     PBData* tail;
 
+    // 공개 : 멤버 함수
 public:
     // file.cpp
-    void ReadFile();  /////
-    void WriteFile(); /////
+    void ReadFile();
+    void WriteFile();
 
     // show.cpp
     void Show();
@@ -63,34 +65,36 @@ public:
 
     // delete.cpp
     void Delete();
+
+    // delete_all.cpp
     void DeleteAll();
 
+    // 비공개 : 멤버 함수 내부 함수
 private:
+    // search.cpp
     PBData* SearchIdx(const int& _idx);
     PBData* SearchName(const string& _name);
     PBData* SearchNumber(const string& _number);
 
+    // create.cpp
     void PushBack(const string& _name, const string& _number);
     void PushFront(const string& _name, const string& _number);
 
+    // update.cpp
     int UpdateName(PBData* _pPBData, const string& _name);
     int UpdateNumber(PBData* _pPBData, const string& _number);
 
-    int Delete(const PBData* _pPBData);
+    // delete.cpp
+    int DeletePBData(const PBData* _pPBData);
 
-    int DeleteAll(const PhoneBook* _phone_book);
+    // delete_all.cpp
+    void DeletePhoneBook();
 
-    /*
-    public:
-        // 공개 : 연산자 오버로딩 선언
-        PhoneBook &operator<(const NameNumber &_name_number);  // < 연산자 오버로딩 시 PushBack
-        PhoneBook &operator<<(const NameNumber &_name_number); // << 연산자 오버로딩 시 PushFront
-        PhoneBook &operator>(const PBData *_pPBData);		   // > 연산자 오버로딩 시 Delete
-        PhoneBook &operator>>(const PhoneBook *_phone_book);   // >> 연산자 오버로딩 시 DeleteAll
-        PhoneBook &operator*(const NameNumber &_name_number);  // * 연산자 오버로딩 시 Search(Address)
-        PhoneBook &operator&(const NameNumber &_name_number);  // & 연산자 오버로딩 시 Search(Reference)
-    */
+    // 공개 : 연산자 오버로딩
+public:
+    PhoneBook& operator*(); // * 연산자 오버로딩 시 Search //////////
 
+    // 공개 : 생성자 및 소멸자
 public:
     PhoneBook();
     ~PhoneBook();

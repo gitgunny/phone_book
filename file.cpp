@@ -1,45 +1,32 @@
 #include "phone_book.h"
+#include <fstream>
 
 void PhoneBook::ReadFile()
 {
-    FILE* fp = fopen("phone_book.pb", "rt");
+    std::ifstream input_file;
+    input_file.open("phone_book.pb", std::ios::in);
+    string name, number;
 
-    int max_idx;
-    char name[name_max_len];
-    char number[number_max_len];
-
-    fscanf(fp, "%d\n", &max_idx);
-    for (int i = 0; i < max_idx; i++)
-    {
-        fscanf(fp, "%s %s\n", name, number);
+    while (input_file >> name >> number)
         PushBack(name, number);
-    }
 
-    fclose(fp);
+    input_file.close();
 }
 
 void PhoneBook::WriteFile()
 {
-    FILE* fp = fopen("phone_book.pb", "wt");
+    std::ofstream output_file;
+    output_file.open("phone_book.pb", std::ios::out);
+    PBData* pPBData = head;
+    PBData* pTemp = nullptr;
 
-    if (head != nullptr)
+    while (pPBData != nullptr)
     {
-        PBData* pPBData = head;
-        PBData* pTmpPBData = nullptr;
-
-        fprintf(fp, "%d\n", max_idx);
-        while (pPBData != nullptr)
-        {
-            fprintf(fp, "%s %s\n", pPBData->name, pPBData->number);
-            pTmpPBData = pPBData->next;
-            delete pPBData;
-            pPBData = pTmpPBData;
-        }
-
-        max_idx = 0;
-        head = nullptr;
-        tail = nullptr;
+        output_file << pPBData->name << " " << pPBData->number << endl;
+        pTemp = pPBData->next;
+        delete pPBData;
+        pPBData = pTemp;
     }
 
-    fclose(fp);
+    output_file.close();
 }
