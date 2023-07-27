@@ -9,31 +9,30 @@
 * update.cpp : 이름 전화번호 제한 조건 추가(CheckLength, CheckNumber 이용)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-show.cpp : C++ 스타일화
-create.cpp : 이름 전화번호 입력 즉시 무결성 확인
+phonebook.cpp : C++ 스타일화
 create.cpp : C++ 스타일화
-create.cpp : create 관련 멤버함수 수정
-phonebook.h : PBData 생성자 추가(create 최적화)
+create.cpp : PushFront 함수 버그 수정
+create.cpp : 전화번호 무결성 검사 버그 수정
+show.cpp : C++ 스타일화
+show.cpp : 정렬 맞추기
 
 (예정)
-show.cpp : 정렬 맞추기
+search.cpp : C++ 스타일화
+search.cpp : search 기능으로 delete, update 기능 최적화
+
+delete.cpp : C++ 스타일화
+delete.cpp : delete_all 합치기
+delete_all.cpp :
+
 updata.cpp : C++ 스타일화
 
-delete.cpp : delete_all 합치기
-delete_all.cpp
+common.cpp : C++ 스타일화
+common.cpp : 연산자 오버로딩 Search만 활성화 이외 제거
 
-search.cpp
-common.cpp : 연산자 오버로딩 Search만 활성화
+file.cpp : C++ 스타일화
+file.cpp : 파일 입출력 기능 활성화
 
-(이후 재활성화)
-파일 입출력 기능 비활성화
-연산자 오버로딩 기능 비활성화(NameNumber 클래스 제거)
-< 	PushBack
-<<	PushFront
->	Delete
->> 	DeleteAll
-*	Search(Address)
-&	Search(Reference)
+phone_book.h : 프로그램 종료시 소멸자로 메모리 초기화
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 */
@@ -48,9 +47,9 @@ int main()
     while (1)
     {
         phone_book.Show();
-        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-        printf("▦ 1. 검색  ▦ 2. 추가  ▦ 3. 수정  ▦ 4. 삭제  ▦ 5. 전부삭제  ▦ 0. 종료  ▦\n");
-        printf("▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
+        cout << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
+        cout << "▦ 1. 검색  ▦ 2. 추가  ▦ 3. 수정  ▦ 4. 삭제  ▦ 5. 전부삭제  ▦ 0. 종료  ▦" << endl;
+        cout << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
 
         switch (select_menu = _getch())
         {
@@ -70,11 +69,11 @@ int main()
             phone_book.DeleteAll();
             break;
         case MENU_0:
-            printf("\n\t프로그램을 종료합니다. (엔터)");
+            cout << endl << "\t프로그램을 종료합니다. (엔터)";
             _getchar();
             return 0;
         default:
-            printf("\n\t잘못 입력 하셨습니다. 다시 입력 해주세요 (엔터)");
+            cout << endl << "\t잘못 입력 하셨습니다. 다시 입력 해주세요 (엔터)";
             _getchar();
             break;
         }

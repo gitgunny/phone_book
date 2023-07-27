@@ -2,6 +2,7 @@
 
 #include <conio.h> // getch
 #include <iostream>
+#include <iomanip>
 #include <string.h> // strlen, strcpy, strcmp
 #include <string>
 

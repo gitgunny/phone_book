@@ -4,11 +4,11 @@ void PhoneBook::Show()
 {
     system("cls");
 
-    cout << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎ 전화번호부 ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n";
-    cout << "\n\tNo.\t이름\t\t전화번호\n";
+    cout << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎ 전화번호부 ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
+    cout << endl << std::setw(10) << "No." << std::setw(20) << "이름" << std::setw(25) << "전화번호" << endl;
 
     if (head == nullptr)
-        cout << "\n\t등록된 번호가 없습니다.\n";
+        cout << endl << "\t등록된 번호가 없습니다." << endl;
     else
     {
         PBData* pPBData = head;
@@ -17,10 +17,9 @@ void PhoneBook::Show()
         while (pPBData != nullptr)
         {
             pPBData->idx = cnt_idx++;
-            // printf("\n\t%-5d\t%-15s\t%-15s\n", pPBData->idx, pPBData->name, pPBData->number);
-            cout << "\n\t" << pPBData->idx << "\t" << pPBData->name << "\t" << pPBData->number << "\n";
+            cout << endl << std::setw(10) << pPBData->idx << std::setw(20) << pPBData->name << std::setw(25) << pPBData->number << endl;
             pPBData = pPBData->next;
         }
     }
-    cout << "\n";
+    cout << endl;
 }
