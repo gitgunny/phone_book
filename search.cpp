@@ -84,8 +84,7 @@ PBData* PhoneBook::SearchName(const string& _name)
 
     while (pPBData != NULL)
     {
-        // if (strcmp(pPBData->name, _name) == 0)
-        if (pPBData->name.find(_name))
+        if (pPBData->name.find(_name) != string::npos)
             return pPBData;
 
         pPBData = pPBData->next;
@@ -100,8 +99,7 @@ PBData* PhoneBook::SearchNumber(const string& _number)
 
     while (pPBData != NULL)
     {
-        // if (strcmp(pPBData->number, _number) == 0)
-        if (pPBData->number.find(_number))
+        if (pPBData->number.find(_number) != string::npos)
             return pPBData;
 
         pPBData = pPBData->next;

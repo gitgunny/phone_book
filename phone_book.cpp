@@ -9,18 +9,12 @@
 * update.cpp : 이름 전화번호 제한 조건 추가(CheckLength, CheckNumber 이용)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-phone_book.h : 일부 주석 추가 및 수정
-file.cpp : C++ 스타일화
-common.cpp : 파일 입출력 기능 활성화
-phone_book.h : 프로그램 종료시 소멸자로 메모리 초기화 활성화(파일 입출력에 구현)
-delete_all.cpp : C++ 스타일화
-delete_all.cpp : string 클래스 추가로 오버플로우 방지
-delete 기능 : delete, delete_all 내부 함수명 변경
+약간의 소스코드 수정
 
 (예정)
 search.cpp : C++ 스타일화
+search.cpp : string 클래스 추가로 오버플로우 방지
 search.cpp : search 기능으로 delete, update 기능 최적화
-
 delete.cpp : C++ 스타일화
 delete.cpp : string 클래스 추가로 오버플로우 방지
 

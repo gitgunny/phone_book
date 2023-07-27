@@ -21,7 +21,7 @@ void PhoneBook::Create()
         cout << endl << "\t이름(이전으로 0) : ";
         cin >> create_name;
 
-        if (create_name.length() == 1 && (create_name.find("0") != string::npos))
+        if (create_name.length() == 1 && (create_name.find('0') != string::npos))
             break;
         if (create_name.length() > name_max_len)
         {
@@ -33,7 +33,7 @@ void PhoneBook::Create()
         cout << endl << "\t전화번호(이전으로 0) : ";
         cin >> create_number;
 
-        if (create_number.length() == 1 && (create_number.find("0") != string::npos))
+        if (create_number.length() == 1 && (create_number.find('0') != string::npos))
             break;
         if (create_number.length() > number_max_len || isNum(create_number) == false)
         {
