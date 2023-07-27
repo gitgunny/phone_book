@@ -3,6 +3,7 @@
 void PhoneBook::Show()
 {
     system("cls");
+    cin.clear();
 
     cout << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎ 전화번호부 ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
     cout << endl << std::setw(10) << "No." << std::setw(20) << "이름" << std::setw(25) << "전화번호" << endl;

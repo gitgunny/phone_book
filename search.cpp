@@ -4,64 +4,55 @@ void PhoneBook::Search()
 {
     int select_search;
     int search_idx;
-    char search_name[name_max_len];
-    char search_number[number_max_len];
+    string search_name, search_number;
     PBData* pPBData = nullptr;
 
     while (1)
     {
-        select_search = 0;
-        search_idx = 0;
-        memset(search_name, '\0', sizeof(search_name));
-        memset(search_number, '\0', sizeof(search_number));
+        Show();
+        cout << endl << "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦" << endl;
 
-        printf("\n▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦ ☎    검색    ☎ ▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦\n");
-
-        printf("\n\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ");
+        cout << endl << "\t1. 순번 검색  2. 이름 검색  3. 번호 검색  0. 이전으로 : ";
         select_search = _getch();
 
         if (select_search == MENU_0)
             break;
         else if (select_search == MENU_1)
         {
-            printf("\n\n\t검색할 순번 : ");
-            _fscanf(stdin, "%d", &search_idx);
+            cout << endl << endl << "\t검색할 순번 : ";
+            cin >> search_idx;
 
             pPBData = SearchIdx(search_idx);
         }
         else if (select_search == MENU_2)
         {
-            printf("\n\n\t검색할 이름 : ");
-            _fgets(search_name, sizeof(search_name), stdin);
+            cout << endl << endl << "\t검색할 이름 : ";
+            cin >> search_name;
 
             pPBData = SearchName(search_name);
         }
         else if (select_search == MENU_3)
         {
-            printf("\n\n\t검색할 번호 : ");
-            _fgets(search_number, sizeof(search_number), stdin);
+            cout << endl << endl << "\t검색할 번호 : ";
+            cin >> search_number;
 
             pPBData = SearchNumber(search_number);
         }
         else
         {
-            printf("\n\n\t[실패] 잘못 입력 하셨습니다. (엔터)");
+            cout << endl << endl << "\t[실패] 잘못 입력 하셨습니다. (엔터)";
             _getchar();
+            continue;
         }
 
-        if (select_search >= MENU_1 && select_search <= MENU_3)
-        {
-            if (pPBData != nullptr)
-                printf("\n\t[결과]\t%-5d\t%-15s\t%-15s (엔터)", pPBData->idx, pPBData->name, pPBData->number);
-            else
-                printf("\n\t[실패] 검색된 결과가 없습니다. (엔터)");
+        if (pPBData)
+            cout << endl << "\t[결과]" << std::setw(10) << pPBData->idx << std::setw(20) << pPBData->name << std::setw(20) << pPBData->number << " (엔터)";
+        else
+            cout << endl << "\t[실패] 검색된 결과가 없습니다. (엔터)";
 
-            _getchar();
-        }
+        _getchar();
     }
 }
-
-/* 중복 찾기 기능 추가(이후 중복 데이터 선택 후 수정, 삭제 기능 추가) */
 
 PBData* PhoneBook::SearchIdx(const int& _idx)
 {
@@ -84,7 +75,7 @@ PBData* PhoneBook::SearchName(const string& _name)
 
     while (pPBData != NULL)
     {
-        if (pPBData->name.find(_name) != string::npos)
+        if (pPBData->name.compare(_name) == 0)
             return pPBData;
 
         pPBData = pPBData->next;
@@ -99,7 +90,7 @@ PBData* PhoneBook::SearchNumber(const string& _number)
 
     while (pPBData != NULL)
     {
-        if (pPBData->number.find(_number) != string::npos)
+        if (pPBData->number.compare(_number) == 0)
             return pPBData;
 
         pPBData = pPBData->next;

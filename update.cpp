@@ -103,8 +103,6 @@ void PhoneBook::Update()
     }
 }
 
-/* 이름 전화번호 제한 조건 추가(Create의 CheckLength, CheckNumber 이용) */
-
 int PhoneBook::UpdateName(PBData* _pPBData, const string& _name)
 {
     if (_pPBData != nullptr)
