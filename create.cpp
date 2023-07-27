@@ -1,14 +1,5 @@
 #include "phone_book.h"
 
-bool isNum(const string& str)
-{
-    for (char const& let : str)
-        if (std::isdigit(let) == false)
-            return false;
-
-    return true;
-}
-
 void PhoneBook::Create()
 {
     string create_name, create_number;

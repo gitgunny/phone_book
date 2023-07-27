@@ -3,7 +3,6 @@
 #include <conio.h>  // getch
 #include <iomanip>  // setw
 #include <iostream> // cin, cout, endl
-#include <string.h> // strlen, strcpy, strcmp(삭제 예정)
 #include <string>   // string
 
 enum
@@ -90,16 +89,11 @@ private:
     // delete_all.cpp
     void DeletePhoneBook();
 
-    // 공개 : 연산자 오버로딩
-public:
-    PhoneBook& operator*(); // * 연산자 오버로딩 시 Search //////////
-
     // 공개 : 생성자 및 소멸자
 public:
     PhoneBook();
     ~PhoneBook();
 };
 
-void _getchar();                                          // 엔터 입력용(버퍼 비우기 포함)
-void _fscanf(FILE* _Stream, const char* _Format, ...);    // 정수 입력용(fgets는 문자열 이외 입력 불가)
-void _fgets(char* _Buffer, int _MaxCount, FILE* _Stream); // 문자열 입력용(fscanf는 띄어쓰기 입력 불가)
+void _getchar();
+bool isNum(const string& str);

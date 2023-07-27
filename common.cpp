@@ -1,25 +1,21 @@
 #include "phone_book.h"
+#include <limits>
 
 void _getchar()
 {
-    fflush(stdin); // 출력 버퍼 비우기
-    rewind(stdin); // 입력 버퍼 비우기
-    getchar();
+    cin.clear();
+    cin.sync();
+    // cin.ignore();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void _fscanf(FILE* _Stream, const char* _Format, ...)
+bool isNum(const string& str)
 {
-    fscanf(_Stream, _Format);
-    fflush(_Stream); // 출력 버퍼 비우기
-    rewind(_Stream); // 입력 버퍼 비우기
-}
+    for (char const& let : str)
+        if (std::isdigit(let) == false)
+            return false;
 
-void _fgets(char* _Buffer, int _MaxCount, FILE* _Stream)
-{
-    fgets(_Buffer, _MaxCount, _Stream);
-    _Buffer[strlen(_Buffer) - 1] = '\0'; // 마지막 줄바꿈 문자 비우기
-    fflush(_Stream);                     // 출력 버퍼 비우기
-    rewind(_Stream);                     // 입력 버퍼 비우기
+    return true;
 }
 
 PhoneBook::PhoneBook() : max_idx(0), head(nullptr), tail(nullptr)
@@ -30,9 +26,4 @@ PhoneBook::PhoneBook() : max_idx(0), head(nullptr), tail(nullptr)
 PhoneBook::~PhoneBook()
 {
     WriteFile();
-}
-
-PhoneBook& PhoneBook::operator*() // * 연산자 오버로딩 시 Search //////////
-{
-    return *this;
 }
